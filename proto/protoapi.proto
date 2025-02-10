@@ -15,8 +15,7 @@ message RandomParams{
 }
 
 message RandomInt {
-  int64 Seed = 1;
-  int64 Place = 2;
+  int64 Value = 1;
 }
 
 message DateTime {
