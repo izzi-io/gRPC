@@ -5,30 +5,35 @@ import (
 	"flag"
 	"fmt"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 	"log"
 	"math/rand"
 	"net"
-	client2 "protoapi/client"
+	pbclient "protoapi/client"
 	protoapi "protoapi/proto"
+	gserver "protoapi/server"
 )
 
 func main() {
 
 	port := ":8080"
 
-	_type := flag.String("type", "client", "Server or Client ?")
+	_type := flag.String("type", "pbclient", "Server or Client ?")
 	flag.Parse()
 
 	if *_type == "client" {
-		conn, err := grpc.NewClient("localhost" + port)
+		conn, err := grpc.NewClient("localhost"+port, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			log.Fatalf("could not connect: %v", err)
 			return
 		}
 
-		client := protoapi.NewRandomClient(conn)
-		r, err := client2.GetDateTime(context.Background(), client)
+		defer conn.Close()
+
+		clt := protoapi.NewRandomClient(conn)
+
+		r, err := pbclient.GetDateTime(context.Background(), clt)
 
 		if err != nil {
 			log.Fatalf("cannot get datetime: %v", err)
@@ -38,7 +43,7 @@ func main() {
 		fmt.Println("Server datetime: ", r.Value)
 
 		length := int64(rand.Intn(20))
-		p, err := client2.GetPassword(context.Background(), client, 100, length+1)
+		p, err := pbclient.GetPassword(context.Background(), clt, 100, length+1)
 		if err != nil {
 			log.Fatalf("cannot get password: %v", err)
 		}
@@ -48,7 +53,7 @@ func main() {
 		place := int64(rand.Intn(100))
 		seed := int64(rand.Intn(100))
 
-		i, err := client2.GetRandom(context.Background(), client, seed, place)
+		i, err := pbclient.GetRandom(context.Background(), clt, seed, place)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -58,7 +63,7 @@ func main() {
 
 	} else {
 		server := grpc.NewServer()
-		var randomServer protoapi.RandomServer
+		var randomServer gserver.RandomServer
 		protoapi.RegisterRandomServer(server, randomServer)
 		reflection.Register(server)
 

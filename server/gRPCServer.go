@@ -15,7 +15,7 @@ func (RandomServer) GetDate(ctx context.Context, r *protoapi.RequestDateTime) (*
 
 	currentTime := time.Now()
 	response := &protoapi.DateTime{
-		Value: currentTime.Format("2006-01-02 15:04:05.000"),
+		Value: currentTime.String(),
 	}
 	return response, nil
 }

@@ -8,7 +8,7 @@ import (
 func GetDateTime(ctx context.Context, m protoapi.RandomClient) (*protoapi.DateTime, error) {
 
 	request := &protoapi.RequestDateTime{
-		Value: "",
+		Value: "Please send me the date and time",
 	}
 
 	return m.GetDate(ctx, request)
