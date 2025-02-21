@@ -1,4 +1,4 @@
-module protoapi
+module github.com/izzi-io/gRPC
 
 go 1.23.6
 
