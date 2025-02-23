@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package greet;
+
+option go_package = "github.com/izzi-io/gRPC/calculator/proto";
+
+
+message SumRequest {
+  uint32 firstNumber = 1;
+  uint32 secondNumber = 2;
+}
+
+message SumResponse {
+  uint32 result = 1;
+}
+
+service CalculatorService {
+  rpc Sum(SumRequest) returns(SumResponse);
+}

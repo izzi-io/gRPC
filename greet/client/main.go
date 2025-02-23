@@ -5,9 +5,11 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"log"
+
+	pb "github.com/izzi-io/gRPC/greet/proto"
 )
 
-var addr string = "localhost:5001"
+var addr string = "localhost:5051"
 
 func main() {
 	conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -16,4 +18,9 @@ func main() {
 		return
 	}
 	defer conn.Close()
+
+	c := pb.NewGreetServiceClient(conn)
+
+	doGreet(c)
+
 }
