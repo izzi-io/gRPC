@@ -28,9 +28,6 @@ func greetManyTimes(client pb.GreetServiceClient) {
 		} else if err != nil {
 			log.Fatalf("%v.GreetManyTimes RPC call failed while reading the stream", err)
 		}
-
 		log.Println(msg)
-
 	}
-
 }
