@@ -27,8 +27,8 @@ func longGreet(c pb.GreetServiceClient) {
 	for _, req := range reqs {
 		if err := stream.Send(req); err != nil {
 			log.Fatalf("%v.LongGreet(_) = _, %v", c, err)
-			time.Sleep(1000 * time.Millisecond)
 		}
+		time.Sleep(1000 * time.Millisecond)
 	}
 
 	res, err := stream.CloseAndRecv()
